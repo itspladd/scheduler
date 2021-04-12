@@ -12,13 +12,17 @@ export default function DayListItem(props) {
     "day-list__item--full": !spots,
   }) 
 
+  const formatSpots = spots => {
+    return `${ spots || "no"} spot${ spots === 1 ? "" : "s" }`
+  };
+
   return(
     <li 
       className = {dayListItemClass}
       onClick = {() => setDay(name)}
     >
       <h2>{props.name}</h2>
-      <h3>{ spots || "no"} spot{ spots !== 1 && "s" } remaining</h3>
+      <h3>{formatSpots(spots)} remaining</h3>
     </li>
   ) 
 }
