@@ -196,7 +196,7 @@ storiesOf("Appointment", module)
     <Appointment
       id={1}
       time="12pm"
-      interview={{ student: "Pladd", interviewer: interviewers[0]}} />
+      interview={{ student: "Pladd", interviewer}} />
     <Appointment id="last" time="1pm" />
   </>
 ))
