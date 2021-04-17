@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 import "components/Application.scss";
 import DayList from "./DayList";
@@ -7,73 +6,21 @@ import Appointment from "./Appointment"
 import { getAppointmentsForDay,
          getInterviewersForDay,
          getInterview } from "../helpers/selectors";
+import useApplicationData from "hooks/useApplicationData";
 
 export default function Application(props) {
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {}
-  });
-
-  useEffect(() => {
-    Promise.all([
-      axios.get("/api/days"),
-      axios.get("/api/appointments"),
-      axios.get("/api/interviewers")
-    ])
-      .then(allRes => allRes.map(res => res.data))
-      .then(all => setState(prev => (
-        {...prev, 
-          days: all[0], 
-          appointments: all[1],
-          interviewers: all[2]
-        })));
-  }, [])
-
-  const setDay = newDay => setState({...state, day: newDay});
-
-  const bookInterview = (apptID, interview) => {
-    const appointment = {
-      ...state.appointments[apptID],
-      interview: {...interview}
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [apptID]: appointment
-    };
-
-    return axios.put(`/api/appointments/${apptID}`, appointment)
-      .then(res => setState({
-        ...state,
-        appointments
-      }))
-      .catch(err => console.error(err))
-  };
-
-  const cancelInterview = (apptID) => {
-    const appointment = state.appointments[apptID];
-    appointment.interview = null;
-
-    const appointments = {
-      ...state.appointments,
-      [apptID]: appointment
-    };
-    
-    return axios.delete(`/api/appointments/${apptID}`)
-    .then(res => console.log("api updated"))
-    .then(res => {
-      setState({
-        ...state,
-        appointments});
-    })
-    .catch(err => console.error(err))
-  };
+  
+  const {
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
 
 
+  console.log(dailyAppointments)
   return (
     <main className="layout">
       <section className="sidebar">
