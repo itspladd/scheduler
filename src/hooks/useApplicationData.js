@@ -58,6 +58,11 @@ export default function useApplicationData() {
 
   // After everything has rendered originally, get all our data from the API. 
   useEffect(() => {
+    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    webSocket.onopen = function(event) {
+      console.log("Connected!");
+    }
+
     Promise.all([
       axios.get("/api/days"),
       axios.get("/api/appointments"),
