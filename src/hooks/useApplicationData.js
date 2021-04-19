@@ -6,7 +6,7 @@ export default function useApplicationData() {
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
-  const SET_SLOTS = "SET_SLOTS";
+  const SET_SPOTS = "SET_SPOTS";
 
   const initialState = {
     day: "Monday",
@@ -24,7 +24,7 @@ export default function useApplicationData() {
       return { ...state, day: newDay };
     };
 
-    const setSlots = ({ id, increment }) => {
+    const setSpots = ({ id, increment }) => {
       // "id" is the ID of the appointment being added or canceled.
       const days = [...(state.days)];
       const currentDay = days.find(day => day.appointments.includes(id));
@@ -47,7 +47,7 @@ export default function useApplicationData() {
     const actions = {
       [SET_APPLICATION_DATA]: setAppData,
       [SET_DAY]: setDay,
-      [SET_SLOTS]: setSlots,
+      [SET_SPOTS]: setSpots,
       [SET_INTERVIEW]: setInterview
     }
     
@@ -74,21 +74,24 @@ export default function useApplicationData() {
   }, []);
 
   const bookInterview = (id, interview) => {
+    // Check: are we booking a new interview or editing an existing one? Set the increment appropriately.
+    const increment = state.appointments[id].interview ? 0 : 1;
+
     const appointment = {
       ...state.appointments[id],
       interview: {...interview}
     };
-
+    console.log(state.appointments[id])
     return axios.put(`/api/appointments/${id}`, appointment)
       .then(() => dispatch({ type: SET_INTERVIEW, id, interview }))
-      .then(() => dispatch({ type: SET_SLOTS, id, increment: -1 }));
+      .then(() => dispatch({ type: SET_SPOTS, id, increment }));
 
   };
 
   const cancelInterview = (id) => {
     return axios.delete(`/api/appointments/${id}`)
       .then(() => dispatch({ type: SET_INTERVIEW, id, interview: null }))
-      .then(() => dispatch({ type: SET_SLOTS, id, increment: 1 }));
+      .then(() => dispatch({ type: SET_SPOTS, id, increment: 1 }));
   };
 
   const setDay = newDay => dispatch({ type: SET_DAY, newDay })
