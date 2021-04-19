@@ -30,6 +30,7 @@ export default function Form(props) {
         <form autoComplete="off"
           onSubmit={handleSubmit}>
           <input
+            data-testid = "student-name-input"
             className="appointment__create-input text--semi-bold"
             name="name"
             type="text"
