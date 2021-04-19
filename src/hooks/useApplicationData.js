@@ -6,7 +6,6 @@ export default function useApplicationData() {
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
-  const SET_SPOTS = "SET_SPOTS";
 
   const initialState = {
     day: "Monday",
@@ -24,14 +23,13 @@ export default function useApplicationData() {
       return { ...state, day: newDay };
     };
 
-    const setSpots = ({ id, increment }) => {
-      // "id" is the ID of the appointment being added or canceled.
-      const days = [...(state.days)];
-      const currentDay = days.find(day => day.appointments.includes(id));
-      currentDay.spots += increment;
-
-      return { ...state, days };
-    };
+    const updateSpots = (state, id) => {
+      const newState = { ...state }
+      const currentDay = newState.days.find(day => day.appointments.includes(id));
+      const nullAppts = currentDay.appointments.filter(apptID => newState.appointments[apptID].interview === null)
+      currentDay.spots = nullAppts.length;
+      return newState;
+    }
 
     const setInterview = ({ id, interview }) => {
       const appointment = {...(state.appointments[id]), interview};
@@ -41,13 +39,16 @@ export default function useApplicationData() {
         [id]: appointment
       };
 
-      return { ...state, appointments};
+      const newState = { ...state, appointments};
+      const stateUpdatedSpots = updateSpots(newState, id);
+      return { ...stateUpdatedSpots, appointments};
     }
+
+
 
     const actions = {
       [SET_APPLICATION_DATA]: setAppData,
       [SET_DAY]: setDay,
-      [SET_SPOTS]: setSpots,
       [SET_INTERVIEW]: setInterview
     }
     
@@ -58,9 +59,16 @@ export default function useApplicationData() {
 
   // After everything has rendered originally, get all our data from the API. 
   useEffect(() => {
-    const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-    webSocket.onopen = function(event) {
-      console.log("Connected!");
+    const ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    ws.onopen = function(event) {
+      ws.send("ping");
+    }
+
+    ws.onmessage = function(event) {
+      const data = JSON.parse(event.data)
+      if (data.type) {
+        dispatch(data);
+      }
     }
 
     Promise.all([
@@ -86,17 +94,14 @@ export default function useApplicationData() {
       ...state.appointments[id],
       interview: {...interview}
     };
-    console.log(state.appointments[id])
     return axios.put(`/api/appointments/${id}`, appointment)
-      .then(() => dispatch({ type: SET_INTERVIEW, id, interview }))
-      .then(() => dispatch({ type: SET_SPOTS, id, increment }));
+      .then(() => dispatch({ type: SET_INTERVIEW, id, interview }));
 
   };
 
   const cancelInterview = (id) => {
     return axios.delete(`/api/appointments/${id}`)
-      .then(() => dispatch({ type: SET_INTERVIEW, id, interview: null }))
-      .then(() => dispatch({ type: SET_SPOTS, id, increment: 1 }));
+      .then(() => dispatch({ type: SET_INTERVIEW, id, interview: null }));
   };
 
   const setDay = newDay => dispatch({ type: SET_DAY, newDay })
