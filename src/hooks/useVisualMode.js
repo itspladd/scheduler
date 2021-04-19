@@ -20,8 +20,6 @@ export default function useVisualMode(initialMode) {
       setMode(newHistory[newHistory.length - 1]);
       setHistory(newHistory);
     }
-
-    history.length > 1 && console.log("hi");
   }
 
   return { mode, transition, back };
