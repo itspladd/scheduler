@@ -18,6 +18,7 @@ export default function Show(props) {
             src="images/edit.png"
             alt="Edit"
             role="button"
+            aria-label="edit"
             onClick={props.onEdit}
           />
           <img 
@@ -25,7 +26,7 @@ export default function Show(props) {
             src="images/trash.png"
             alt="Delete"
             role="button"
-            name="delete"
+            aria-label="delete"
             onClick={props.onDelete}
           />
         </section>

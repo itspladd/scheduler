@@ -84,5 +84,17 @@ export default {
       status: 204,
       statusText: "No Content"
     })
+  }),
+
+  delete: jest.fn((url) => {
+    const parsedUrl = url.split('/');
+    const apptId = parsedUrl.pop();
+    const lookupUrl = parsedUrl.join('/');
+    lookup[lookupUrl][apptId].interview = null;
+
+    return Promise.resolve({
+      status: 204,
+      statusText: "No Content"
+    })
   })
 }
