@@ -8,6 +8,8 @@ export default function Empty(props) {
         className="appointment__add-button"
         src="images/add.png"
         alt="Add"
+        role="button"
+        name="add"
         onClick={props.onAdd}
       />
     </main>

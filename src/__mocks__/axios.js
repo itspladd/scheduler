@@ -1,0 +1,88 @@
+const fixtures = {
+  days: [
+    {
+      id: 1,
+      name: "Monday",
+      appointments: [1, 2],
+      interviewers: [1, 2],
+      spots: 1
+    },
+    {
+      id: 2,
+      name: "Tuesday",
+      appointments: [3, 4],
+      interviewers: [3, 4],
+      spots: 1
+    }
+  ],
+  appointments: {
+    "1": { id: 1, time: "12pm", interview: null },
+    "2": {
+      id: 2,
+      time: "1pm",
+      interview: { student: "Englebert Humperdinck", interviewer: 2 }
+    },
+    "3": {
+      id: 3,
+      time: "2pm",
+      interview: { student: "Crimbleton Scrumbley III", interviewer: 4 }
+    },
+    "4": { id: 4, time: "3pm", interview: null }
+  },
+  interviewers: {
+    "1": {
+      id: 1,
+      name: "Sylvia Palmer",
+      avatar: "https://i.imgur.com/LpaY82x.png"
+    },
+    "2": {
+      id: 2,
+      name: "Tori Malcolm",
+      avatar: "https://i.imgur.com/Nmx0Qxo.png"
+    },
+    "3": {
+      id: 3,
+      name: "Mildred Nazir",
+      avatar: "https://i.imgur.com/T2WwVfS.png"
+    },
+    "4": {
+      id: 4,
+      name: "Cohana Roy",
+      avatar: "https://i.imgur.com/FK8V841.jpg"
+    }
+  }
+};
+
+const API_DAYS = "/api/days";
+const API_APPOINTMENTS = "/api/appointments";
+const API_INTERVIEWERS = "/api/interviewers";
+
+const lookup = {
+  [API_DAYS]: fixtures.days,
+  [API_APPOINTMENTS]: fixtures.appointments,
+  [API_INTERVIEWERS]: fixtures.interviewers,
+};
+
+export default {
+
+
+  get: jest.fn(url => {
+    return Promise.resolve({
+      status: 200,
+      statusText: "OK",
+      data: lookup[url]
+    });
+  }),
+
+  put: jest.fn((url, appointment) => {
+    const parsedUrl = url.split('/');
+    const apptId = parsedUrl.pop();
+    const lookupUrl = parsedUrl.join('/');
+    lookup[lookupUrl][apptId] = appointment;
+
+    return Promise.resolve({
+      status: 204,
+      statusText: "No Content"
+    })
+  })
+}
