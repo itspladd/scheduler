@@ -79,7 +79,6 @@ export default {
     const apptId = parsedUrl.pop();
     const lookupUrl = parsedUrl.join('/');
     lookup[lookupUrl][apptId] = appointment;
-
     return Promise.resolve({
       status: 204,
       statusText: "No Content"

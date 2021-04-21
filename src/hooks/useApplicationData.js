@@ -88,15 +88,14 @@ export default function useApplicationData() {
 
   const bookInterview = (id, interview) => {
     // Check: are we booking a new interview or editing an existing one? Set the increment appropriately.
-    const increment = state.appointments[id].interview ? 0 : 1;
+
 
     const appointment = {
       ...state.appointments[id],
       interview: {...interview}
     };
     return axios.put(`/api/appointments/${id}`, appointment)
-      .then(() => dispatch({ type: SET_INTERVIEW, id, interview }));
-
+      .then(() => dispatch({ type: SET_INTERVIEW, id, interview }))
   };
 
   const cancelInterview = (id) => {
