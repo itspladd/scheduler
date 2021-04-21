@@ -48,7 +48,6 @@ export default function useApplicationData() {
 
     const actions = {
       [SET_APPLICATION_DATA]: setAppData,
-      [SET_DAY]: setDay,
       [SET_INTERVIEW]: setInterview
     }
     
