@@ -10,7 +10,7 @@ import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
 
-// Cusomt hooks
+// Custom hook
 import useVisualMode from "../../hooks/useVisualMode"
 
 export default function Appointment(props) {
@@ -24,14 +24,20 @@ export default function Appointment(props) {
   const ERROR_SAVE = "ERROR_SAVE";
   const ERROR_DELETE = "ERROR_DELETE";
 
+  // useVisualMode controls what the component currently displays.
+  // We start at SHOW if we have an interview.
   const initialState = props.interview ? SHOW : EMPTY;
   const { mode, transition, back } = useVisualMode(initialState);
 
+  // Error control: if we've somehow ended up in the wrong state
+  // (i.e. EMPTY but there's an interview, or SHOW but there's no interview)
+  // then change to the proper state.
   useEffect(() => {
     props.interview && mode === EMPTY && transition(SHOW);
     !props.interview && mode === SHOW && transition(EMPTY);
   }, [props.interview, transition, mode]);
 
+  // Book an interview for this appointment slot.
   const save = (name, interviewer) => {
     const interview = {
       student: name,
@@ -49,6 +55,7 @@ export default function Appointment(props) {
     .then(res => transition(EMPTY))
     .catch(res => transition(ERROR_DELETE, true));
   };
+
   return (
     <article className="appointment" data-testid="appointment">
       <Header time={props.time} />

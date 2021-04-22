@@ -2,6 +2,7 @@ import { getAppointmentsForDay,
          getInterviewersForDay,
          getInterview } from "helpers/selectors";
 
+// Dummy state data
 const state = {
   days: [
     {

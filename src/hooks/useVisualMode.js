@@ -14,6 +14,8 @@ export default function useVisualMode(initialMode) {
   }
 
   function back() {
+    // We can only go back if there's a previous state to go back to,
+    // so if the history is <= 1, then we do nothing.
     if (history.length > 1) {
       const newHistory = [...history];
       newHistory.pop();

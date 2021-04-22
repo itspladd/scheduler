@@ -1,3 +1,4 @@
+// Returns an array of appointment objects for the given day.
 export function getAppointmentsForDay(state, day) {
   const dayObj = state.days.filter(elem => elem.name === day)
   if (dayObj.length === 0) {
@@ -11,6 +12,7 @@ export function getAppointmentsForDay(state, day) {
 
 }
 
+// Returns an array of interviewer objects for the given day.
 export function getInterviewersForDay(state, day) {
   const dayObj = state.days.filter(elem => elem.name === day)
   if (dayObj.length === 0) {
@@ -24,6 +26,7 @@ export function getInterviewersForDay(state, day) {
 
 }
 
+// Return the interview object for the given id with the interviewer object inserted
 export function getInterview(state, interview) {
   if (!interview) {
     return null;

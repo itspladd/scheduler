@@ -3,6 +3,7 @@ import axios from "axios";
 
 export default function useApplicationData() {
 
+  // Constants for the reducer actions
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
@@ -15,6 +16,8 @@ export default function useApplicationData() {
   };
 
   function reducer(state, action) {
+    // Four helper functions within the reducer itself.
+    // The first three correspond directly to the SET_X constants.
     const setAppData = ({ days, appointments, interviewers }) => {
       return { ...state, days, appointments, interviewers }
     };
@@ -22,14 +25,6 @@ export default function useApplicationData() {
     const setDay = ({ newDay }) => {
       return { ...state, day: newDay };
     };
-
-    const updateSpots = (state, id) => {
-      const newState = { ...state }
-      const currentDay = newState.days.find(day => day.appointments.includes(id));
-      const nullAppts = currentDay.appointments.filter(apptID => newState.appointments[apptID].interview === null)
-      currentDay.spots = nullAppts.length;
-      return newState;
-    }
 
     const setInterview = ({ id, interview }) => {
       const appointment = {...(state.appointments[id]), interview};
@@ -44,7 +39,14 @@ export default function useApplicationData() {
       return { ...stateUpdatedSpots, appointments};
     }
 
-
+    // updateSpots is used by setInterview to calculate the correct number of spots for that day
+    const updateSpots = (state, id) => {
+      const newState = { ...state }
+      const currentDay = newState.days.find(day => day.appointments.includes(id));
+      const nullAppts = currentDay.appointments.filter(apptID => newState.appointments[apptID].interview === null)
+      currentDay.spots = nullAppts.length;
+      return newState;
+    }
 
     const actions = {
       [SET_APPLICATION_DATA]: setAppData,
@@ -87,9 +89,6 @@ export default function useApplicationData() {
   }, []);
 
   const bookInterview = (id, interview) => {
-    // Check: are we booking a new interview or editing an existing one? Set the increment appropriately.
-
-
     const appointment = {
       ...state.appointments[id],
       interview: {...interview}
