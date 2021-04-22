@@ -2,6 +2,11 @@
 
 A single-page interview-scheduling application made with React! Built as part of my education at Lighthouse Labs to teach me the basics of a React project.
 
+Features to elaborate on:
+- Websocket implementation
+- CI deployment
+- Automated testing
+
 ## Setup
 
 Install dependencies with `npm install`.
