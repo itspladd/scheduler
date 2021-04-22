@@ -66,6 +66,7 @@ export default function useApplicationData() {
       ws.send("ping");
     }
 
+    // When we get data from the server, update the state.
     ws.onmessage = function(event) {
       const data = JSON.parse(event.data)
       if (data.type) {
