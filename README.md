@@ -49,4 +49,4 @@ View, book, and cancel interview appointments!
 ### Live Updates with Websocket
 No need to refresh the page to see someone else's bookings - the pages stay in sync automatically!
 ![](https://github.com/itspladd/scheduler/blob/main/docs/websocket.gif)
-*Just don't look at the Github Issues page for this projet. Ignore it. There are no bugs in Ba Sing Se.*
+*Just don't look at the Github Issues page for this project. Ignore it. There are no bugs in Ba Sing Se.*
